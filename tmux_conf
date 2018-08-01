@@ -1,0 +1,69 @@
+#解绑ctrl+b快捷键
+#unbind C-b
+
+#更换前缀快捷键为ctrl+a
+#set -g prefix C-a
+
+#Tmux会话选项
+set -g status-keys vi
+
+#开启鼠标模式
+# set -g mode-mouse on
+# set -g monitor-activity on
+# set -g xterm-keys on
+
+#设置默认终端配色
+set -g default-terminal "screen-256color"
+
+#自动重命名窗口名字
+set -g automatic-rename on
+
+#关闭窗口自动重新分配ID
+set -g renumber-windows on
+
+# 美化窗格栏
+set -g pane-active-border-bg    none
+set -g pane-active-border-fg    red
+set -g display-panes-active-colour red
+
+# 美化信息栏
+set -g message-bg blue
+set -g message-fg white
+
+# 美化命令行
+set -g message-command-bg cyan
+set -g message-command-fg white
+
+# black blue red green yellow white cyan magenta
+# 美化标题栏
+# set -g status on
+set -g status-position top
+set -g status-fg black
+set -g status-bg white
+set -g status-justify centre
+# set -g status-justify left
+set -g status-left '#[fg=black,bold][#S]'
+# set -g status-left-length 20
+set -g status-right '#[fg=black,bold][%Y-%m-%d %H:%M]'
+set -g window-status-format ' #[fg=black,bold]#I:#W '
+set -g window-status-current-format ' #[fg=white,bold]* #I:#W *#[fg=black] '
+set -g window-status-fg black
+set -g window-status-bg white
+set -g window-status-current-fg white
+set -g window-status-current-bg black
+
+#每当修改tmux.conf后 按ctrl+b r重新加载配置立即生效
+bind-key r source-file ~/.tmux.conf \; display-message "Config Reloaded."
+
+# 重定义分隔窗格快捷键
+unbind '"'
+unbind %
+bind-key | split-window -h
+bind-key - split-window -v
+
+#重定义选择分隔窗格
+bind k selectp  -U
+bind j selectp  -D
+bind h selectp  -L
+bind l selectp  -R
+
