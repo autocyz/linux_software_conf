@@ -1,16 +1,17 @@
 #解绑ctrl+b快捷键
-#unbind C-b
+unbind C-b
 
 #更换前缀快捷键为ctrl+a
-#set -g prefix C-a
+set -g prefix C-a
 
 #Tmux会话选项
 set -g status-keys vi
 
-#开启鼠标模式
-# set -g mode-mouse on
-# set -g monitor-activity on
-# set -g xterm-keys on
+# use Alt-arrow key to switch panes
+bind -n M-Left select-pane -L
+bind -n M-Right select-pane -R
+bind -n M-Up select-pane -U
+bind -n M-Down select-pane -D
 
 #设置默认终端配色
 set -g default-terminal "screen-256color"
@@ -21,8 +22,26 @@ set -g automatic-rename on
 #关闭窗口自动重新分配ID
 set -g renumber-windows on
 
+# set -g mouse on
+# bind -n WheelUpPane if-shell -F -t = "#{mouse_any_flag}" "send-keys -M" "if -Ft= '#{pane_in_mode}' 'send-keys -M' 'select-pane -t=; copy-mode -e; send-keys -M'"
+# bind -n WheelDownPane select-pane -t= \; send-keys -M
+# bind -n C-WheelUpPane select-pane -t= \; copy-mode -e \; send-keys -M
+# bind -T copy-mode-vi    C-WheelUpPane   send-keys -X halfpage-up
+# bind -T copy-mode-vi    C-WheelDownPane send-keys -X halfpage-down
+# bind -T copy-mode-emacs C-WheelUpPane   send-keys -X halfpage-up
+# bind -T copy-mode-emacs C-WheelDownPane send-keys -X halfpage-down
+
+# To copy, left click and drag to highlight text in yellow, 
+# once you release left click yellow text will disappear and will automatically be available in clibboard
+# # Use vim keybindings in copy mode
+# setw -g mode-keys vi
+# Update default binding of `Enter` to also use copy-pipe
+# unbind -T copy-mode-vi Enter
+# bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "xclip -selection c"
+# bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xclip -in -selection clipboard"
+
 # 美化窗格栏
-set -g pane-active-border-bg    none
+# set -g pane-active-border-bg    none
 set -g pane-active-border-fg    red
 set -g display-panes-active-colour red
 
@@ -55,6 +74,17 @@ set -g window-status-current-bg black
 #每当修改tmux.conf后 按ctrl+b r重新加载配置立即生效
 bind-key r source-file ~/.tmux.conf \; display-message "Config Reloaded."
 
+#拷贝模式按键重定义
+set -g mode-keys vi
+#定义ctrl+y进入拷贝模式
+bind-key y copy-mode
+#定义使用v选取
+bind-key -t vi-copy v begin-selection
+#定义使用y复制 加入到剪切板
+bind-key -t vi-copy y copy-pipe "xclip -i -sel clip > /dev/null"
+#定义ctrl+b p粘贴
+bind-key p run "xclip -o -sel clip | tmux load-buffer - ; tmux paste-buffer"
+
 # 重定义分隔窗格快捷键
 unbind '"'
 unbind %
@@ -67,3 +97,16 @@ bind j selectp  -D
 bind h selectp  -L
 bind l selectp  -R
 
+# 重定义新建窗口快捷键
+# bind-key -n C-T new-window
+#重定义窗口选择快捷键为alt + 0-9
+# bind-key -n M-1 select-window -t :0
+# bind-key -n M-2 select-window -t :1
+# bind-key -n M-3 select-window -t :2
+# bind-key -n M-4 select-window -t :3
+# bind-key -n M-5 select-window -t :4
+# bind-key -n M-6 select-window -t :5
+# bind-key -n M-7 select-window -t :6
+# bind-key -n M-8 select-window -t :7
+# bind-key -n M-9 select-window -t :8
+# bind-key -n M-0 select-window -t :9
